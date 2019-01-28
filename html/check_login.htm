@@ -1,0 +1,31 @@
+<?php
+
+include('connect.php')
+
+	$stmt = "SELECT * FROM member WHERE Username = '".mysql_real_escape_string($_POST['txtUsername'])."'
+	and Password = '".mysql_real_escape_string($_POST['txtPassword'])."'";
+
+		$query = sqlsrv_query($conn,$stmt);
+	$objResult =  sqlsrv_fetch_array($query);
+	if(!$objResult)
+	{
+			echo "Username and Password Incorrect!";
+	}
+	else
+	{
+			$_SESSION["UserID"] = $objResult["UserID"];
+			$_SESSION["Status"] = $objResult["Status"];
+
+			session_write_close();
+
+			if($objResult["Status"] == "ADMIN")
+			{
+				header("location:Home-Factory.php");
+			}
+			else
+			{
+				header("location:Home-Shop.php");
+			}
+	}
+	mysql_close();
+?>

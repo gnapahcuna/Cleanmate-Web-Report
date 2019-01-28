@@ -1,0 +1,282 @@
+<?php include('connect.php') ?>
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>Summary All</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- VENDOR CSS -->
+	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="assets/vendor/linearicons/style.css">
+	<link rel="stylesheet" href="assets/vendor/chartist/css/chartist-custom.css">
+	<!-- MAIN CSS -->
+	<link rel="stylesheet" href="assets/css/main.css">
+	<!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+	<link rel="stylesheet" href="assets/css/demo.css">
+	<!-- GOOGLE FONTS -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<!-- ICONS -->
+	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- NAVBAR -->
+		<?php include('bar.php') ?>
+		<!-- END NAVBAR -->
+		<!-- LEFT SIDEBAR -->
+		<div id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">
+
+						<li><a href="Home-Factory.php" class="active"><i class="lnr lnr-home"></i> <span>หน้าแรก</span></a></li>
+						<li><a href="Summary-All-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดขายรวมทุกประเภท</span></a></li>
+						<li><a href="Order-All.php" class=""><i class="lnr lnr-chart-bars"></i> <span>รายงานข้อมูลรายละเอียดออเดอร์</span></a></li>
+						<li><a href="Summary-Service-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดขายแยกตามประเภทบริการ</span></a></li>
+						<li><a href="Summary-Product-Group-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดขายแยกตามประเภทกลุ่มสินค้า</span></a></li>
+						<li><a href="Summary-All-Product-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดขายแยกตามทุกรายการสินค้า</span></a></li>
+						<li><a href="Summary-Canceled-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดขายรายการยกเลิกออเดอร์<br>(ที่ร้าน, ที่โรงงาน )</span></a></li>
+						<li><a href="Order-All-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดรายการออเดอร์ทุกประเภท</span></a></li>
+						<li><a href="Order-Service-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดรายการออเดอร์ประเภทบริการ</span></a></li>
+						<li><a href="Order-Product-Group-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดรายการออเดอร์ประเภทกลุ่มสินค้า</span></a></li>
+						<li><a href="Order-All-Product-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดรายการออเดอรทุกรายการสินค้า</span></a></li>
+						<li><a href="Customer-Product-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดออเดอร์ลูกค้าประจำร้าน</span></a></li>
+						<li><a href="Customer-Service-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดประเภทบริการลูกค้าประจำร้าน</span></a></li>
+
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<!-- END LEFT SIDEBAR -->
+
+
+		<!-- MAIN -->
+		<div class="main">
+			<div class="main-content">
+				<div class="container-fluid">
+					<div class="col-md-6">
+						<!-- INPUTS -->
+						<div class="panel">
+							<div class="panel-heading">
+								<h3 class="panel-title">ค้นหา</h3>
+							</div>
+							<div class="panel-body">
+								<form action="Summary-All-F.php" method="post" onSubmit="return getDate()" >
+
+									<label>เลือกวันที่</label>
+									<input type="date" name="date_start" class="form-control" required>
+									<br><label>ถึง</label><br>
+									<input type="date" name="date_end" class="form-control" required>
+									<br>
+									<label>ค้นหาประเภทร้าน</label><br>
+									<input type="text" class="form-control" placeholder="ค้นหาประเภทร้าน" name="keywords">
+									<br><label>ค้นหาชื่อร้าน</label><br>
+									<input type="text" class="form-control" placeholder="ค้นหาชื่อร้าน" name="keywords2">
+									<br>
+
+									<input type="submit" value="Search">
+
+								</form>
+							</div>
+						</div>
+					</div>
+					<!-- END INPUTS -->
+
+					<?php
+					$date_start=$_POST["date_start"];
+					$date_end=$_POST["date_end"];
+					$keywords=$_POST["keywords"];
+					$keywords2=$_POST["keywords2"];
+					?>
+					<div class="col-md-6">
+						<!-- INPUTS -->
+						<div class="panel">
+							<div class="panel-heading">
+								<h1>10 อันดับ</h1>
+								<h1>สรุปยอดขายรวมทุกประเภท</h1>
+							</div>
+							<br>
+							<div class="panel-body">
+								<label>จัดอันดับ</label><br>
+								<select class="form-control"  name="forma" onchange="location = this.value;">
+									<option value="cheese">--เลือกการจัดอันดับ--</option>
+									<option value="Summary-All-F10.php">10 อันดับแรก (Top 10)</option>
+									<option value="Summary-All-F20.php">20 อันดับแรก (Top 20)</option>
+									<option value="Summary-All-F30.php">30 อันดับแรก (Top 30)</option>
+								</select>
+								<br>
+							</div>
+						</div>
+					</div>
+
+
+
+					<!-- END INPUTS -->
+
+
+
+					<!-- OVERVIEW -->
+					<?php
+					$stmt="SELECT TOP 10 mas_branch.BranchNameTH,ops_order.BranchID,mas_branchgroup.BranchGroupName,	Count(distinct ops_order.OrderID) AS cont,
+					coalesce (SUM(CASE WHEN ops_orderdetail.ServiceNameEN = 'Dry Clean' then ops_orderdetail.Amount else null end),0) +
+					coalesce (SUM(CASE WHEN ops_orderdetail.ServiceNameEN = 'Laundry' then ops_orderdetail.Amount else null end),0) +
+					coalesce (SUM(CASE WHEN ops_orderdetail.ServiceNameEN = 'Spa Leathers' then ops_orderdetail.Amount else null end),0) +
+					coalesce (SUM(CASE WHEN ops_orderdetail.ServiceNameEN = 'hand wash' then ops_orderdetail.Amount else null end),0) AS total
+
+					FROM (ops_order left join (mas_branch left join mas_branchgroup on mas_branch.BranchGroupID=mas_branchgroup.BranchGroupID)
+					on ops_order.BranchID=mas_branch.BranchID)left join ops_orderdetail
+					 on ops_order.OrderNo=ops_orderdetail.OrderNo
+
+					WHERE  ops_order.OrderDate BETWEEN '$date_start' AND '$date_end' AND mas_branchgroup.BranchGroupName like '%$keywords%'
+					AND mas_branch.BranchNameTH like '%$keywords2%' AND ops_order.IsActive='1'
+
+					GROUP BY  mas_branch.BranchNameTH,ops_order.BranchID,mas_branchgroup.BranchGroupName";
+					$query = sqlsrv_query($conn,$stmt);
+					?>
+
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">Bar Chart</h3>
+								</div>
+								<div class="panel-body">
+									<center>
+										<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+										<div id="chart_div" style="height: 370px; width: 100%"></div>
+									</center>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- END OVERVIEW -->
+
+
+
+
+					<!-- RECENT PURCHASES -->
+
+					<div class="panel">
+						<div class="panel-heading">
+							<h3 class="panel-title">ตารางข้อมูล</h3>
+
+						</div>
+						<div class="panel-body">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th bgcolor="#ffffff"> <center>ลำดับที่</center> </th>
+										<th bgcolor="#ffffff"> <center>ประเภทร้าน</center> </th>
+										<th bgcolor="#ffffff"> <center>รหัสร้าน</center> </th>
+										<th bgcolor="#ffffff"> <center>ชือร้าน</center> </th>
+										<th bgcolor="#ffffff"> <center>จำนวนเงิน</center> </th>
+									</tr>
+								</thead>
+								<?php
+
+								$i=1;
+								$total1=0;
+
+								while($row = sqlsrv_fetch_array($query)){
+
+									$format_total=number_format($row['total'],2);
+
+									$total1=$total1+$row['total'];
+
+									?>
+
+									<tbody>
+										<tr>
+											<td align="center"><?php echo $i;?></td>
+											<td align="center"><?php echo $row['BranchGroupName'];?></td>
+											<td align="center"><?php echo $row['BranchID'];?></td>
+											<td align="center"><?php echo $row['BranchNameTH'];?></td>
+											<td align="center"><?php echo $format_total;?></td>
+											<?php $i++;}?>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- END MAIN CONTENT -->
+				</div>
+				<!-- END MAIN -->
+				<div class="clearfix"></div>
+
+			</div>
+			<!-- END WRAPPER -->
+			<!-- Javascript -->
+			<script type="text/javascript">
+				function getDate(){
+					var start=document.getElementById("date_start").value;
+					var end=document.getElementById("date_start").value;
+				}
+			</script>
+			<script src="assets/vendor/jquery/jquery.min.js"></script>
+			<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+			<script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+			<script src="assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+			<script src="assets/vendor/chartist/js/chartist.min.js"></script>
+			<script src="assets/scripts/klorofil-common.js"></script>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+
+			<?php
+			$query = sqlsrv_query($conn,$stmt);
+			?>
+
+			<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+			<script type="text/javascript">
+				google.charts.load('current', {'packages':['bar']});
+				google.charts.setOnLoadCallback(drawChart);
+
+				function drawChart() {
+					var data = google.visualization.arrayToDataTable([
+						['ชื่อร้านค้า', 'ราคารวม',],
+						<?php
+						while($row = sqlsrv_fetch_array($query)) {
+							echo "['".$row['BranchNameTH']."',".$row['total']."],";
+						}
+						?>
+						]);
+					var options = {
+						chart: {
+				 subtitle: 'จำนวนเงิน (บาท)'
+			 },
+						bars: 'vertical',
+						vAxis: {format: 'decimal'},
+
+						colors: ['#1b9e77', '#d95f02', '#7570b3']
+					};
+
+					var chart = new google.charts.Bar(document.getElementById('chart_div'));
+
+					chart.draw(data, google.charts.Bar.convertOptions(options));
+
+					var btns = document.getElementById('btn-group');
+
+					btns.onclick = function (e) {
+
+						if (e.target.tagName === 'BUTTON') {
+							options.vAxis.format = e.target.id === 'none' ? '' : e.target.id;
+							chart.draw(data, google.charts.Bar.convertOptions(options));
+						}
+					}
+				}
+
+			</script>
+
+
+		</body>
+
+		</html>

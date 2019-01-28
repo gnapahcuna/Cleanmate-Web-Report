@@ -1,0 +1,319 @@
+﻿<?php include('connect.php') ?>
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>Order All Product</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- VENDOR CSS -->
+	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="assets/vendor/linearicons/style.css">
+	<link rel="stylesheet" href="assets/vendor/chartist/css/chartist-custom.css">
+	<!-- MAIN CSS -->
+	<link rel="stylesheet" href="assets/css/main.css">
+	<!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+	<link rel="stylesheet" href="assets/css/demo.css">
+	<!-- GOOGLE FONTS -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<!-- ICONS -->
+	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- NAVBAR -->
+		<?php include('bar.php') ?>
+		<!-- END NAVBAR -->
+		<!-- LEFT SIDEBAR -->
+		<div id="sidebar-nav" class="sidebar">
+			<div class="sidebar-scroll">
+				<nav>
+					<ul class="nav">
+
+						<li><a href="Home-Factory.php" class="active"><i class="lnr lnr-home"></i> <span>หน้าแรก</span></a></li>
+						<li><a href="Summary-All-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดขายรวมทุกประเภท</span></a></li>
+						<li><a href="Summary-Service-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดขายแยกตามประเภทบริการ</span></a></li>
+						<li><a href="Summary-Product-Group-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดขายแยกตามประเภทกลุ่มสินค้า</span></a></li>
+						<li><a href="Summary-All-Product-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดขายแยกตามทุกรายการสินค้า</span></a></li>
+						<li><a href="Summary-Canceled-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดขายรายการยกเลิกออเดอร์<br>(ที่ร้าน, ที่โรงงาน )</span></a></li>
+						<li><a href="Order-All-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดรายการออเดอร์ทุกประเภท</span></a></li>
+						<li><a href="Order-Service-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดรายการออเดอร์ประเภทบริการ</span></a></li>
+						<li><a href="Order-Product-Group-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดรายการออเดอร์ประเภทกลุ่มสินค้า</span></a></li>
+						<li><a href="Order-All-Product-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดรายการออเดอรทุกรายการสินค้า</span></a></li>
+						<li><a href="Customer-Product-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดออเดอร์ลูกค้าประจำร้าน</span></a></li>
+						<li><a href="Customer-Service-F.php" class=""><i class="lnr lnr-chart-bars"></i> <span>สรุปยอดประเภทบริการลูกค้าประจำร้าน</span></a></li>
+
+					</ul>
+				</nav>
+			</div>
+		</div>
+		<!-- END LEFT SIDEBAR -->
+
+
+		<!-- MAIN -->
+		<div class="main">
+			<div class="main-content">
+				<div class="container-fluid">
+					<div class="col-md-6">
+						<!-- INPUTS -->
+						<div class="panel">
+							<div class="panel-heading">
+								<h3 class="panel-title">ค้นหา</h3>
+							</div>
+							<div class="panel-body">
+								<form action="Order-All-Product-F.php" method="post" onSubmit="return getDate()" >
+
+									<label>เลือกวันที่</label>
+									<input type="date" name="date_start" class="form-control" required>
+									<br><label>ถึง</label><br>
+									<input type="date" name="date_end" class="form-control" required>
+									<br><br><br
+									<label>ค้นหารายการสินค้า</label><br>
+									<input type="text" class="form-control" placeholder="ค้นหารายการสินค้า" name="keywords">
+									<br>
+
+									<input type="submit" value="Search">
+<br><br><br>
+								</form>
+							</div>
+						</div>
+					</div>
+					<!-- END INPUTS -->
+
+					<?php
+					$date_start=$_POST["date_start"];
+					$date_end=$_POST["date_end"];
+					$keywords=$_POST["keywords"];
+					?>
+					<div class="col-md-6">
+						<!-- INPUTS -->
+						<div class="panel">
+							<div class="panel-heading">
+
+								<h1>สรุปยอดรายการออเดอร์ทุกรายการสินค้า</h1>
+
+								<h2 class="panel-title">ผลการค้นหา</h2>
+							</div>
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-md-12">
+										<div class="metric">
+											<p><span class="title">วันที่</span>
+												<span class="number"><?php echo "&nbsp";?><?php echo substr($date_start,8,2);?>-<?php echo substr($date_start,5,2);?>-<?php echo substr($date_start,0,4);?>
+												<?php echo "&nbsp ถึง &nbsp";?>
+												<?php echo substr($date_end,8,2);?>-<?php echo substr($date_end,5,2);?>-<?php echo substr($date_end,0,4);?></span>
+											</p>
+											<br>
+										</div>
+									</div>
+
+								</div>
+							</div><br>
+							<div class="panel-body">
+								<label>จัดอันดับ</label><br>
+								<select class="form-control"  name="forma" onchange="location = this.value;">
+									<option value="cheese">--เลือกการจัดอันดับ--</option>
+									<option value="Order-All-Product-F10.php">10 อันดับแรก (Top 10)</option>
+									<option value="Order-All-Product-F20.php">20 อันดับแรก (Top 20)</option>
+									<option value="Order-All-Product-F30.php">30 อันดับแรก (Top 30)</option>
+								</select>
+								<br>
+							</div>
+						</div>
+					</div>
+
+
+
+					<!-- END INPUTS -->
+
+
+
+					<!-- OVERVIEW -->
+					<?php
+					$stmt="SELECT distinct ops_orderdetail.ProductNameTH,
+					 Count(case when mas_branchgroup.BranchGroupName = 'ร้านคลีนเมทสำนักงานใหญ่' AND ops_order.OrderNo=ops_orderdetail.OrderNo then 1 else null end) as service1,
+ Count(case when mas_branchgroup.BranchGroupName = 'ร้านเฟรนไซส์ทั่วไป'AND ops_order.OrderNo=ops_orderdetail.OrderNo then 1 else null end) as service2,
+ Count(case when mas_branchgroup.BranchGroupName = 'ร้าน 7-11 ทั่วไป' AND ops_order.OrderNo=ops_orderdetail.OrderNo then 1 else null end) as service3,
+ Count(case when mas_branchgroup.BranchGroupName = 'ร้านคลีนเมทสำนักงานใหญ่' AND ops_order.OrderNo=ops_orderdetail.OrderNo then 1 else null end)+
+  Count(case when mas_branchgroup.BranchGroupName = 'ร้านเฟรนไซส์ทั่วไป' AND ops_order.OrderNo=ops_orderdetail.OrderNo then 1 else null end)+
+ Count(case when mas_branchgroup.BranchGroupName = 'ร้าน 7-11 ทั่วไป'  AND ops_order.OrderNo=ops_orderdetail.OrderNo then 1 else null end) as total
+  from ops_orderdetail left join
+ (ops_order left join
+ (mas_branch left join mas_branchgroup on mas_branch.BranchID=mas_branchgroup.BranchGroupID)
+ on ops_order.BranchID=mas_branch.BranchID)
+ on ops_orderdetail.OrderNo=ops_order.OrderNo
+ WHERE ops_order.OrderDate BETWEEN '$date_start' AND '$date_end' OR ops_orderdetail.ProductNameTH like '%$keywords%' AND ops_order.IsActive='1'
+ GROUP BY ops_orderdetail.ProductNameTH
+ ";
+
+					$query = sqlsrv_query($conn,$stmt);
+					?>
+
+
+					<div class="row">
+						<div class="col-md-12">
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">Bar Chart</h3>
+								</div>
+								<div class="panel-body">
+									<center>
+										<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+										<div id="chart_div" style="height: 1200px; width: 100%"></div>
+									</center>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- END OVERVIEW -->
+
+
+
+
+					<!-- RECENT PURCHASES -->
+
+					<div class="panel">
+						<div class="panel-heading">
+							<h3 class="panel-title">ตารางข้อมูล</h3>
+
+						</div>
+						<div class="panel-body">
+							<table class="table table-bordered">
+								<thead>
+									<tr>
+										<th bgcolor="#ffffff"> <center>ลำดับที่</center> </th>
+										<th bgcolor="#ffffff"> <center>รายการสินค้า</center> </th>
+										<th bgcolor="#ffffff"> <center>จำนวนออเดอร์ สำนักงานใหญ่</center> </th>
+										<th bgcolor="#ffffff"> <center>จำนวนออเดอร์ Franchise</center> </th>
+										<th bgcolor="#ffffff"> <center>จำนวนออเดอร์ 7-Eleven</center> </th>
+										<th bgcolor="#ffffff"> <center>รวมจำนวนออเดอร์</center> </th>
+									</tr>
+								</thead>
+								<?php
+
+								$i=1;
+								$total1=0;
+								$total2=0;
+								$total3=0;
+								$service=0;
+								$total=0;
+
+								while($row = sqlsrv_fetch_array($query)){
+
+									$total1=$total1+$row['service1'];
+									$total2=$total2+$row['service2'];
+									$total3=$total3+$row['service3'];
+									$service=$row['service1']+$row['service2']+$row['service3'];
+									$total=$total1+$total2+$total3;
+
+
+
+									?>
+
+									<tbody>
+										<tr>
+											<td align="center"><?php echo $i;?></td>
+											<td align="center"><?php echo $row['ProductNameTH'];?></td>
+											<td align="center"><?php echo $row['service1'];?></td>
+											<td align="center"><?php echo $row['service2'];?></td>
+											<td align="center"><?php echo $row['service3'];?></td>
+											<td align="center"><?php echo $service;?></td>
+											<?php $i++;}?>
+											<tr>
+
+												<td colspan="2" align="center" bgcolor="#2eb82e"><font color="white"><text1><?php echo 'รวม';?></text1></font></td>
+												<td align="center" bgcolor="#2eb82e"><text1><font color="white"><?php echo $total1;?></font></text1></td>
+												<td align="center" bgcolor="#2eb82e"><text1><font color="white"><?php echo $total2;?></font></text1></td>
+												<td align="center" bgcolor="#2eb82e"><text1><font color="white"><?php echo $total3;?></font></text1></td>
+												<td align="center" bgcolor="#2eb82e"><text1><font color="white"><?php echo $total;?></font></text1></td>
+
+											</tr>
+										</tbody>
+									</table>
+								</div>
+
+								<!-- END RECENT PURCHASES -->
+							</div>
+						</div>
+					</div>
+					<!-- END MAIN CONTENT -->
+				</div>
+				<!-- END MAIN -->
+				<div class="clearfix"></div>
+
+			</div>
+			<!-- END WRAPPER -->
+			<!-- Javascript -->
+			<script type="text/javascript">
+				function getDate(){
+					var start=document.getElementById("date_start").value;
+					var end=document.getElementById("date_start").value;
+				}
+			</script>
+			<script src="assets/vendor/jquery/jquery.min.js"></script>
+			<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+			<script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+			<script src="assets/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
+			<script src="assets/vendor/chartist/js/chartist.min.js"></script>
+			<script src="assets/scripts/klorofil-common.js"></script>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+			<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+
+			<?php
+			$query = sqlsrv_query($conn,$stmt);
+			?>
+
+			<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+			<script type="text/javascript">
+			google.charts.load('current', {packages: ['corechart', 'bar']});
+			google.charts.setOnLoadCallback(drawBasic);
+
+			function drawBasic() {
+					var data = google.visualization.arrayToDataTable([
+						['รายการสินค้า', 'สำนักงานใหญ่','Franchise','7-Eleven'],
+						<?php
+						while($row = sqlsrv_fetch_array($query)) {
+							echo "['".$row['ProductNameTH']."',".$row['service1'].",".$row['service2'].",".$row['service3']."],";
+						}
+						?>
+						]);
+
+						var options = {
+							hAxis: {
+          title: 'จำนวนออเดอร์ (ออเดอร์)',
+          minValue: 0
+        },
+
+	         legend: { position: 'top', maxLines: 3 },
+	         bar: { groupWidth: '75%' },
+	         isStacked: true
+					};
+
+					 var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+
+					chart.draw(data, google.charts.Bar.convertOptions(options));
+
+					var btns = document.getElementById('btn-group');
+
+					btns.onclick = function (e) {
+
+						if (e.target.tagName === 'BUTTON') {
+							options.vAxis.format = e.target.id === 'none' ? '' : e.target.id;
+							chart.draw(data, google.charts.Bar.convertOptions(options));
+						}
+					}
+				}
+
+			</script>
+
+
+		</body>
+
+		</html>
